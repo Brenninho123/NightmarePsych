@@ -3,6 +3,7 @@ package editors;
 #if DISCORD_ALLOWED
 import Discord.DiscordClient;
 #end
+
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.display.FlxGridOverlay;
@@ -26,6 +27,7 @@ import openfl.events.Event;
 import openfl.events.IOErrorEvent;
 import openfl.net.FileFilter;
 import haxe.Json;
+
 #if sys
 import sys.io.File;
 #end
@@ -298,6 +300,8 @@ class MenuCharacterEditorState extends MusicBeatState
 			}
 
 			var shiftMult:Int = 1;
+
+			#if mobile
 			if(touchPad.buttonC.pressed || FlxG.keys.pressed.SHIFT) shiftMult = 10;
 
 			if(touchPad.buttonLeft.justPressed || FlxG.keys.justPressed.LEFT) {
@@ -320,6 +324,30 @@ class MenuCharacterEditorState extends MusicBeatState
 			if(touchPad.buttonA.justPressed || FlxG.keys.justPressed.SPACE && curTypeSelected == 1) {
 				grpWeekCharacters.members[curTypeSelected].animation.play('confirm', true);
 			}
+			#else
+			if(FlxG.keys.pressed.SHIFT) shiftMult = 10;
+
+			if(FlxG.keys.justPressed.LEFT) {
+				characterFile.position[0] += shiftMult;
+				updateOffset();
+			}
+			if(FlxG.keys.justPressed.RIGHT) {
+				characterFile.position[0] -= shiftMult;
+				updateOffset();
+			}
+			if(FlxG.keys.justPressed.UP) {
+				characterFile.position[1] += shiftMult;
+				updateOffset();
+			}
+			if(FlxG.keys.justPressed.DOWN) {
+				characterFile.position[1] -= shiftMult;
+				updateOffset();
+			}
+
+			if(FlxG.keys.justPressed.SPACE && curTypeSelected == 1) {
+				grpWeekCharacters.members[curTypeSelected].animation.play('confirm', true);
+			}
+			#end
 		}
 
 		var char:MenuCharacter = grpWeekCharacters.members[1];
