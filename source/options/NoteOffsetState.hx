@@ -60,7 +60,9 @@ class NoteOffsetState extends MusicBeatState
 
 		persistentUpdate = true;
 		FlxG.sound.pause();
+		
 		// Stage
+		
 		var bg:BGSprite = new BGSprite('stageback', -600, -200, 0.9, 0.9);
 		add(bg);
 
@@ -98,7 +100,7 @@ class NoteOffsetState extends MusicBeatState
 		add(boyfriend);
 
 		// Combo stuff
-
+		
 		coolText = new FlxText(0, 0, 0, '', 32);
 		coolText.screenCenter();
 		coolText.x = FlxG.width * 0.35;
@@ -296,7 +298,8 @@ class NoteOffsetState extends MusicBeatState
 				}
 			}
 
-			if( touchPad.buttonC.justPressed || controls.RESET)
+			#if mobile
+			if(touchPad.buttonC.justPressed || controls.RESET)
 			{
 				for (i in 0...ClientPrefs.comboOffset.length)
 				{
@@ -304,6 +307,16 @@ class NoteOffsetState extends MusicBeatState
 				}
 				repositionCombo();
 			}
+			#else
+			if(controls.RESET)
+			{
+				for (i in 0...ClientPrefs.comboOffset.length)
+				{
+					ClientPrefs.comboOffset[i] = 0;
+				}
+				repositionCombo();
+			}
+			#end
 		}
 		else
 		{
@@ -334,12 +347,21 @@ class NoteOffsetState extends MusicBeatState
 				updateNoteDelay();
 			}
 
-			if( touchPad.buttonC.justPressed || controls.RESET)
+			#if mobile
+			if(touchPad.buttonC.justPressed || controls.RESET)
 			{
 				holdTime = 0;
 				barPercent = 0;
 				updateNoteDelay();
 			}
+			#else
+			if(controls.RESET)
+			{
+				holdTime = 0;
+				barPercent = 0;
+				updateNoteDelay();
+			}
+			#end
 		}
 
 		if(controls.ACCEPT)
